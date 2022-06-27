@@ -43,7 +43,7 @@ public class MischiefAutoBroadcast extends JavaPlugin {
         instance = this;
         pluginConfig = new PluginConfig(this);
 
-        int delay = 20 * /*60 **/ pluginConfig.getTime();
+        int delay = 20 * 60 * pluginConfig.getTime();
         getServer().getScheduler().scheduleSyncRepeatingTask(this, MischiefAutoBroadcast::broadcast, delay, delay);
     }
 

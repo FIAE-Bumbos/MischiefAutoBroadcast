@@ -1,7 +1,8 @@
 # MischiefAutoBroadcast
 
+A simple broadcast plugin, allows you to send a list of messages every X minutes.
 
-Part of the MischiefSMP plugin suite.
+You can customize the messages and the title in the config.yml. Color codes are supported.
 
 
 License
