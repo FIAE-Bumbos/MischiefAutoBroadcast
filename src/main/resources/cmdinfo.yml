@@ -1,0 +1,10 @@
+commands:
+  autobroadcast:
+    help:
+      usage: "/autobroadcast help"
+      permission: "autobroadcast.help"
+      default: "false"
+    reload:
+      usage: "/autobroadcast reload"
+      permission: "autobroadcast.reload"
+      default: "false"

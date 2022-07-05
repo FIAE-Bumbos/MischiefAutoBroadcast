@@ -1,7 +1,9 @@
+language: "en"
+languages:
+  - "en"
+  - "de"
 title: "[MischiefAutoBroadcast]"
 # In minutes
 time: 5
 messages:
-  - "Make sure to edit the messages in the config!"
-  - "Also check out the other MischiefSMP plugins!"
-  - "thats all folks"
+  #- "Put your messages here!"
