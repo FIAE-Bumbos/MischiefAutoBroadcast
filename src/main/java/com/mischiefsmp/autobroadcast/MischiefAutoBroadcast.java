@@ -84,7 +84,7 @@ public class MischiefAutoBroadcast extends JavaPlugin {
     }
 
     public void ensureMessageTask() {
-        if(schedulerID == -1 && pluginConfig.getMessages().size() != 0) {
+        if(schedulerID == -1 && (pluginConfig.getMessages() == null || pluginConfig.getMessages().size() != 0)) {
             int delay = 20 * pluginConfig.getTime();
             schedulerID = getServer().getScheduler().scheduleSyncRepeatingTask(this, MischiefAutoBroadcast::broadcast, delay, delay);
         }
