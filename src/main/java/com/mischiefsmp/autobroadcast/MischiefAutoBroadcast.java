@@ -55,7 +55,6 @@ public class MischiefAutoBroadcast extends JavaPlugin {
     }
 
     public void init() {
-        int delay = 20 * pluginConfig.getTime();
 
         if (schedulerID != -1)
             getServer().getScheduler().cancelTask(schedulerID);
@@ -63,8 +62,10 @@ public class MischiefAutoBroadcast extends JavaPlugin {
         ConfigManager.init(pluginConfig);
         boolean hasMessages = pluginConfig.getMessages() != null && pluginConfig.getMessages().size() != 0;
 
-        if(hasMessages)
+        if(hasMessages) {
+            int delay = 20 * 60 * pluginConfig.getTime();
             schedulerID = getServer().getScheduler().scheduleSyncRepeatingTask(this, MischiefAutoBroadcast::broadcast, delay, delay);
+        }
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
             if(!hasMessages)
