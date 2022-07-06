@@ -1,6 +1,9 @@
 package com.mischiefsmp.autobroadcast;
 
+import com.mischiefsmp.autobroadcast.commands.CommandAutoBroadcast;
 import com.mischiefsmp.autobroadcast.config.PluginConfig;
+import com.mischiefsmp.core.LangManager;
+import com.mischiefsmp.core.config.ConfigManager;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -18,8 +21,11 @@ public class MischiefAutoBroadcast extends JavaPlugin {
     private static MischiefAutoBroadcast instance;
     @Getter
     private static PluginConfig pluginConfig;
+    @Getter
+    private static LangManager langManager;
 
     private static int currentMessage = 0;
+    private static int schedulerID = -1;
 
     public void ensureCore(boolean required) {
         if(getServer().getPluginManager().getPlugin("MischiefCore") != null) return;
@@ -42,9 +48,28 @@ public class MischiefAutoBroadcast extends JavaPlugin {
 
         instance = this;
         pluginConfig = new PluginConfig(this);
+        langManager = new LangManager(this, pluginConfig.getLanguages(), pluginConfig.getDefaultLanguage());
 
-        int delay = 20 * 60 * pluginConfig.getTime();
-        getServer().getScheduler().scheduleSyncRepeatingTask(this, MischiefAutoBroadcast::broadcast, delay, delay);
+        getCommand("autobroadcast").setExecutor(new CommandAutoBroadcast());
+        init();
+    }
+
+    public void init() {
+        int delay = 20 * pluginConfig.getTime();
+
+        if (schedulerID != -1)
+            getServer().getScheduler().cancelTask(schedulerID);
+
+        ConfigManager.init(pluginConfig);
+        boolean hasMessages = pluginConfig.getMessages() != null && pluginConfig.getMessages().size() != 0;
+
+        if(hasMessages)
+            schedulerID = getServer().getScheduler().scheduleSyncRepeatingTask(this, MischiefAutoBroadcast::broadcast, delay, delay);
+
+        Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
+            if(!hasMessages)
+                getServer().broadcastMessage(langManager.getString("no-msgs"));
+        });
     }
 
     public static void broadcast() {
