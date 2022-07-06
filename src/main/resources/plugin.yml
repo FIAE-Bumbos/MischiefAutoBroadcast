@@ -1,5 +1,5 @@
 name: MischiefAutoBroadcast
-version: 0.0.4
+version: 0.0.5
 author: sven@wollinger.email
 main: com.mischiefsmp.autobroadcast.MischiefAutoBroadcast
 api-version: 1.18
