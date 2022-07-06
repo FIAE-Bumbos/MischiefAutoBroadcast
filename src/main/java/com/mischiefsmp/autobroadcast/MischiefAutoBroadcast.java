@@ -56,15 +56,12 @@ public class MischiefAutoBroadcast extends JavaPlugin {
 
     public void init() {
         int delay = 20 * pluginConfig.getTime();
-        boolean hasMessages = pluginConfig.getMessages() != null && pluginConfig.getMessages().size() != 0;
 
-        if (schedulerID != -1) {
+        if (schedulerID != -1)
             getServer().getScheduler().cancelTask(schedulerID);
-        } else {
-            ConfigManager.init(pluginConfig);
-        }
 
-        System.out.println(pluginConfig.getMessages());
+        ConfigManager.init(pluginConfig);
+        boolean hasMessages = pluginConfig.getMessages() != null && pluginConfig.getMessages().size() != 0;
 
         if(hasMessages)
             schedulerID = getServer().getScheduler().scheduleSyncRepeatingTask(this, MischiefAutoBroadcast::broadcast, delay, delay);
@@ -73,7 +70,6 @@ public class MischiefAutoBroadcast extends JavaPlugin {
             if(!hasMessages)
                 getServer().broadcastMessage(langManager.getString("no-msgs"));
         });
-
     }
 
     public static void broadcast() {
