@@ -61,6 +61,7 @@ public class CommandAutoBroadcast implements CommandExecutor, TabCompleter {
             cfg.getMessages().add(message.toString());
             ConfigManager.save(cfg);
             lm.sendString(sender, "msg-added");
+            MischiefAutoBroadcast.getInstance().ensureMessageTask();
         } else if(args.length == 1 && args[0].equals("list")) {
             if(!isAllowed(sender, "autobroadcast.list"))
                 return true;

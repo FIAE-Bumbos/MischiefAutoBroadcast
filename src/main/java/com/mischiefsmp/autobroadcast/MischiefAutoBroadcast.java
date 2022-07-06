@@ -55,32 +55,43 @@ public class MischiefAutoBroadcast extends JavaPlugin {
     }
 
     public void init() {
+        ConfigManager.init(pluginConfig);
 
         if (schedulerID != -1)
-            getServer().getScheduler().cancelTask(schedulerID);
-
-        ConfigManager.init(pluginConfig);
-        boolean hasMessages = pluginConfig.getMessages() != null && pluginConfig.getMessages().size() != 0;
-
-        if(hasMessages) {
-            int delay = 20 * 60 * pluginConfig.getTime();
-            schedulerID = getServer().getScheduler().scheduleSyncRepeatingTask(this, MischiefAutoBroadcast::broadcast, delay, delay);
-        }
-
+            cancelMessageTask();
+        ensureMessageTask();
         Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
-            if(!hasMessages)
+            if(!(pluginConfig.getMessages() != null && pluginConfig.getMessages().size() != 0))
                 getServer().broadcastMessage(langManager.getString("no-msgs"));
         });
     }
 
     public static void broadcast() {
         ArrayList<String> messages = pluginConfig.getMessages();
+
+        //If for some reason we reach this just cancel it
+        if(messages.size() == 0) {
+            getInstance().cancelMessageTask();
+            return;
+        }
+
         if(currentMessage > messages.size() - 1)
             currentMessage = 0;
 
         Bukkit.getServer().broadcastMessage(String.format("%s %s", pluginConfig.getTitle(), pluginConfig.getMessages().get(currentMessage)));
 
         currentMessage++;
+    }
+
+    public void ensureMessageTask() {
+        if(schedulerID == -1 && pluginConfig.getMessages().size() != 0) {
+            int delay = 20 * pluginConfig.getTime();
+            schedulerID = getServer().getScheduler().scheduleSyncRepeatingTask(this, MischiefAutoBroadcast::broadcast, delay, delay);
+        }
+    }
+
+    public void cancelMessageTask() {
+        getServer().getScheduler().cancelTask(schedulerID);
     }
 
     @Override
