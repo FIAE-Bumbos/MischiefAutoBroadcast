@@ -1,2 +1,7 @@
 no-msgs: "No messages found! Edit config.yml!"
 available-cmds: "Available commands:"
+msg-added: "Message added!"
+msg-removed: "Message removed!"
+msg-list: "All messages:"
+no-int: "Argument must be an number!"
+bad-id: "Bad id! Check /autobroadcast list!"

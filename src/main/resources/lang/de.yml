@@ -1,2 +1,7 @@
 no-msgs: "Keine Nachrichten gefunden! Bearbeite config.yml!"
 available-cmds: "Verfügbare befehle:"
+msg-added: "Nachricht hinzugefügt!"
+msg-removed: "Nachricht gelöscht!"
+msg-list: "Alle Nachrichten:"
+no-int: "Argument muss eine Zahl sein!"
+bad-id: "Unbekannte id! Siehe /autobroadcast list!"

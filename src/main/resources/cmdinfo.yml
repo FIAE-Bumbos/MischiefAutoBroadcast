@@ -3,8 +3,21 @@ commands:
     help:
       usage: "/autobroadcast help"
       permission: "autobroadcast.help"
-      default: "false"
+      default: "op"
+    list:
+      usage: "/autobroadcast list"
+      permission: "autobroadcast.list"
+      default: "op"
+    add:
+      usage: "/autobroadcast add <message>"
+      permission: "autobroadcast.add"
+      default: "op"
+    remove:
+      usage: "/autobroadcast remove <id>"
+      permission: "autobroadcast.remove"
+      default: "op"
+      exec: "/autobroadcast remove %s"
     reload:
       usage: "/autobroadcast reload"
       permission: "autobroadcast.reload"
-      default: "false"
+      default: "op"
