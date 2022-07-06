@@ -58,7 +58,7 @@ public class CommandAutoBroadcast implements CommandExecutor, TabCompleter {
                     message.append(" ");
                 message.append(args[i]);
             }
-            cfg.getMessages().add(message.toString());
+            cfg.addMessage(message.toString());
             ConfigManager.save(cfg);
             lm.sendString(sender, "msg-added");
             MischiefAutoBroadcast.getInstance().ensureMessageTask();
@@ -66,14 +66,14 @@ public class CommandAutoBroadcast implements CommandExecutor, TabCompleter {
             if(!isAllowed(sender, "autobroadcast.list"))
                 return true;
 
-            if(cfg.getMessages().size() == 0) {
+            if(cfg.messageSize() == 0) {
                 lm.sendString(sender, "no-msgs");
                 return true;
             }
             lm.sendString(sender, "msg-list");
-            for(int i = 0; i < cfg.getMessages().size(); i++) {
+            for(int i = 0; i < cfg.messageSize(); i++) {
                 String message = "[%s] %s";
-                message = String.format(message, i, cfg.getMessages().get(i));
+                message = String.format(message, i, cfg.getMessage(i));
                 sender.sendMessage(message);
             }
         } else if(args.length == 2 && args[0].equals("remove")) {
@@ -85,12 +85,12 @@ public class CommandAutoBroadcast implements CommandExecutor, TabCompleter {
                 return true;
             }
             int id = Integer.parseInt(args[1]);
-            if(cfg.getMessages().size() <= id || id < 0) {
+            if(cfg.messageSize() <= id || id < 0) {
                 lm.sendString(sender, "bad-id");
                 return true;
             }
 
-            cfg.getMessages().remove(id);
+            cfg.removeMessage(id);
             lm.sendString(sender, "msg-removed");
             ConfigManager.save(cfg);
         }
@@ -115,7 +115,7 @@ public class CommandAutoBroadcast implements CommandExecutor, TabCompleter {
             if(!isAllowed(sender, "autobroadcast.remove", false))
                 return list;
 
-            int size = MischiefAutoBroadcast.getPluginConfig().getMessages().size();
+            int size = MischiefAutoBroadcast.getPluginConfig().messageSize();
             for(int i = 0; i < size; i++) {
                 list.add(Integer.toString(i));
             }

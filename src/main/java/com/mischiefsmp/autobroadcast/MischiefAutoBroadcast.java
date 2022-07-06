@@ -3,7 +3,7 @@ package com.mischiefsmp.autobroadcast;
 import com.mischiefsmp.autobroadcast.commands.CommandAutoBroadcast;
 import com.mischiefsmp.autobroadcast.config.PluginConfig;
 import com.mischiefsmp.core.LangManager;
-import com.mischiefsmp.core.config.ConfigManager;
+
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -13,7 +13,6 @@ import java.io.InputStream;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
 import java.util.logging.Level;
 
 public class MischiefAutoBroadcast extends JavaPlugin {
@@ -55,36 +54,34 @@ public class MischiefAutoBroadcast extends JavaPlugin {
     }
 
     public void init() {
-        ConfigManager.init(pluginConfig);
+        pluginConfig.reload();
 
         if (schedulerID != -1)
             cancelMessageTask();
         ensureMessageTask();
         Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
-            if(!(pluginConfig.getMessages() != null && pluginConfig.getMessages().size() != 0))
+            if(pluginConfig.messageSize() == 0)
                 getServer().broadcastMessage(langManager.getString("no-msgs"));
         });
     }
 
     public static void broadcast() {
-        ArrayList<String> messages = pluginConfig.getMessages();
-
         //If for some reason we reach this just cancel it
-        if(messages.size() == 0) {
+        if(pluginConfig.messageSize() == 0) {
             getInstance().cancelMessageTask();
             return;
         }
 
-        if(currentMessage > messages.size() - 1)
+        if(currentMessage > pluginConfig.messageSize() - 1)
             currentMessage = 0;
 
-        Bukkit.getServer().broadcastMessage(String.format("%s %s", pluginConfig.getTitle(), pluginConfig.getMessages().get(currentMessage)));
+        Bukkit.getServer().broadcastMessage(String.format("%s %s", pluginConfig.getTitle(), pluginConfig.getMessage(currentMessage)));
 
         currentMessage++;
     }
 
     public void ensureMessageTask() {
-        if(schedulerID == -1 && (pluginConfig.getMessages() == null || pluginConfig.getMessages().size() != 0)) {
+        if(schedulerID == -1 && pluginConfig.messageSize() != 0) {
             int delay = 20 * 60 * pluginConfig.getTime();
             schedulerID = getServer().getScheduler().scheduleSyncRepeatingTask(this, MischiefAutoBroadcast::broadcast, delay, delay);
         }
